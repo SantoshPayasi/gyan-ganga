@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Mona_Sans, Open_Sans } from "next/font/google";
+import { Geist, Geist_Mono, Mona_Sans } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 
 
-const monaSans = Open_Sans({
-  variable: "--font-open-sans",
+const monaSans = Mona_Sans({
+  variable: "--font-mona-sans",
   subsets: ["latin"],
 });
 

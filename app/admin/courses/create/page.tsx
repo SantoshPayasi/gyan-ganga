@@ -2,13 +2,11 @@
 
 import { buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { courseSchema, CourseSchemaType } from '@/lib/zodSchemas'
 
 import { ArrowLeftIcon } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from "@hookform/resolvers/zod"
+
 import CreateCourseForm from './_components/create-course-form'
 const Page = () => {
 
