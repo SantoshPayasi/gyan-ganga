@@ -11,6 +11,8 @@ import slugify from "slugify";
 import { Select, SelectTrigger } from "@/components/ui/select";
 import { SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 import { SelectField } from "@/components/form-select";
+import { FormRichTextAreaField } from "./rich-text-editor";
+import { FormFileUploaderField } from "./file-uploader-field";
 
 export default function CreateCourseForm() {
     const form = useForm<CourseSchemaType>({
@@ -74,7 +76,8 @@ export default function CreateCourseForm() {
                         textAreaClassName="min-h-[120px]"
                     />
 
-                    <FormTextAreaField
+
+                    <FormRichTextAreaField
                         control={form.control}
                         name="description"
                         label="Description"
@@ -83,13 +86,20 @@ export default function CreateCourseForm() {
                         textAreaClassName="min-h-[120px]"
                     />
 
-                    <FormFields
+                    {/* <FormFields
                         control={form.control}
                         name="fileKey"
                         label="Thumbnail Image"
                         placeholder="thumbnail url"
                         className="w-full"
                         type="text"
+                    /> */}
+                    <FormFileUploaderField
+                        control={form.control}
+                        name="fileKey"
+                        label="Thumbnail Image"
+                        placeholder="thumbnail url"
+                        className="w-full"
                     />
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

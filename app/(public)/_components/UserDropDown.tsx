@@ -3,6 +3,7 @@
 import {
     BookOpenIcon,
     ChevronDownIcon,
+    ChevronUpIcon,
     HomeIcon,
     LayoutDashboardIcon,
     LogOutIcon,
@@ -25,6 +26,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import Link from "next/link"
 import { useSignOut } from "@/hooks/use-signout"
+import { useState } from "react"
 
 
 interface iAppProps {
@@ -40,23 +42,32 @@ export default function UserDropDown({
 }: iAppProps
 ) {
     const handleSignOut = useSignOut();
-
+    const [open, setOpen] = useState(false)
     return (
-        <DropdownMenu>
+        <DropdownMenu open={open} onOpenChange={setOpen}>
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="h-auto p-0 hover:bg-transparent">
                     <Avatar>
                         <AvatarImage src={image} alt="Profile image" />
                         <AvatarFallback>{name[0].toUpperCase()}</AvatarFallback>
                     </Avatar>
-                    <ChevronDownIcon
-                        size={16}
-                        className="opacity-60"
-                        aria-hidden="true"
-                    />
+                    {
+                        open ?
+                            <ChevronUpIcon
+                                size={16}
+                                className="opacity-60"
+                                aria-hidden="true"
+                            />
+                            :
+                            <ChevronDownIcon
+                                size={16}
+                                className="opacity-60"
+                                aria-hidden="true"
+                            />
+                    }
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="max-w-64">
+            <DropdownMenuContent align="end" className="min-w-48">
                 <DropdownMenuLabel className="flex min-w-0 flex-col">
                     <span className="text-foreground truncate text-sm font-medium">
                         {name}

@@ -42,7 +42,7 @@ export function NavUser() {
   if (isPending) return null;
 
   const userName = session?.user.name ? session.user.name : session?.user.email.split("@")[0];
-  const userNameShortForm = session?.user.name ? session.user.name[0] : session?.user.email[0];
+  const userNameShortForm = session?.user.name && session.user.name.length > 0 ? session.user.name[0] : session?.user.email[0];
   const userImage = session?.user.image ? session.user.image : `https://avatar.vercel.sh/${session?.user.email}`;
 
 
