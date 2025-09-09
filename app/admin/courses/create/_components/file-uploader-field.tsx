@@ -26,7 +26,10 @@ export const FormFileUploaderField = ({ control, name, placeholder, className, t
                     <FormItem className={className}>
                         <FormLabel>{label}</FormLabel>
                         <FormControl>
-                            <Uploader />
+                            <Uploader
+                                onChange={(val: string) => field.onChange(val)}
+                                value={typeof field.value === "string" ? field.value : field.value !== undefined ? String(field.value) : undefined}
+                            />
                         </FormControl>
                         <FormMessage />
                     </FormItem>
