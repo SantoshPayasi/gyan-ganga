@@ -34,18 +34,19 @@ import {
 } from "@/components/ui/sidebar"
 import Link from "next/link"
 import Image from "next/image"
+import { BookOpenIcon } from "lucide-react"
 
 const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "#",
+      url: "/admin",
       icon: IconDashboard,
     },
     {
-      title: "Lifecycle",
-      url: "#",
-      icon: IconListDetails,
+      title: "Courses",
+      url: "/admin/courses",
+      icon: BookOpenIcon,
     },
     {
       title: "Analytics",
