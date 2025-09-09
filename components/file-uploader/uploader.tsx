@@ -1,12 +1,13 @@
 "use client"
 
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { FileRejection, useDropzone } from 'react-dropzone'
 import { Card, CardContent } from '../ui/card'
 import { cn } from '@/lib/utils'
-import { RenderEmptyState, RenderErrorState } from './render-state'
+import { RenderEmptyState, RenderErrorState, RenderUploadedState, RenderUploadingState } from './render-state'
 import { toast } from 'sonner'
 import { v4 as uuid } from "uuid";
+import { set } from 'zod'
 interface UploadInterface {
     id: string | null;
     file: File | null;
@@ -68,6 +69,7 @@ export function Uploader() {
             await new Promise<void>((resolve, reject) => {
                 const xhr = new XMLHttpRequest();
                 xhr.upload.onprogress = (event) => {
+                    console.log(event.loaded, event.total)
                     if (event.lengthComputable) {
                         const percentage = Math.round((event.loaded / event.total) * 100);
                         setFileState((prev) => ({
@@ -135,7 +137,9 @@ export function Uploader() {
     }
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
-        console.log(acceptedFiles)
+        if (fileState.objectUrl && !fileState.objectUrl.startsWith("http")) {
+            URL.revokeObjectURL(fileState.objectUrl);
+        }
         if (acceptedFiles.length > 0) {
             const file = acceptedFiles[0];
             setFileState({
@@ -151,7 +155,68 @@ export function Uploader() {
 
             uploadFile(file);
         }
-    }, [])
+    }, [fileState.objectUrl]);
+
+
+    async function handleRemoveFile() {
+        if (fileState.isDeleting || !fileState.objectUrl) return;
+
+        try {
+            setFileState((prev) => ({
+                ...prev,
+                isDeleting: true
+            }))
+
+            const response = await fetch("/api/s3/delete", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    key: fileState.key
+                })
+            })
+
+            if (!response.ok) {
+
+                toast.error("Failed to remove file from storage.")
+
+                setFileState((prev) => ({
+                    ...prev,
+                    isDeleting: false,
+                    error: true
+                }))
+
+                return;
+            }
+
+            if (fileState.objectUrl && !fileState.objectUrl.startsWith("http")) {
+                URL.revokeObjectURL(fileState.objectUrl);
+            }
+
+            setFileState((prev) => ({
+                id: null,
+                file: null,
+                uploading: false,
+                progress: 0,
+                isDeleting: false,
+                error: false,
+                fileType: "image",
+                objectUrl: ""
+            }))
+
+            toast.success("File removed from storage.")
+
+
+        } catch (error) {
+            toast.error("Failed to remove file from storage.Please try again.")
+            setFileState((prev) => ({
+                ...prev,
+                isDeleting: false,
+                error: true
+            }))
+        }
+    }
 
     function onDropRejecteds(fileRejections: FileRejection[]) {
         if (fileRejections.length > 0) {
@@ -174,14 +239,15 @@ export function Uploader() {
             maxFiles: 1,
             multiple: false,
             maxSize: 5 * 1024 * 1024,
-            onDropRejected: onDropRejecteds
+            onDropRejected: onDropRejecteds,
+            disabled: fileState.uploading || !!fileState.objectUrl
         }
     );
 
 
     function renderContent() {
         if (fileState.uploading) {
-            return <h1>Uploading..</h1>
+            return <RenderUploadingState progress={fileState.progress} file={fileState.file as File} />
         }
 
         if (fileState.error) {
@@ -189,11 +255,20 @@ export function Uploader() {
         }
 
         if (fileState.objectUrl) {
-            return <h1>uploaded file</h1>
+            return <RenderUploadedState previewUrl={fileState.objectUrl} handleRemoveFile={handleRemoveFile} isDeleting={fileState.isDeleting} />
         }
 
         return <RenderEmptyState isDragActive={isDragActive} />
     }
+
+
+    useEffect(() => {
+        return () => {
+            if (fileState.objectUrl && !fileState.objectUrl.startsWith("http")) {
+                URL.revokeObjectURL(fileState.objectUrl);
+            }
+        }
+    }, [fileState.objectUrl])
     return (
         <Card {...getRootProps()} className={cn(
             "relative border-2 border-dashed transition-colors duration-200 ease-in-out w-full h-64",
