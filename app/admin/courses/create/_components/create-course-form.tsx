@@ -6,13 +6,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import FormFields, { FormTextAreaField } from "./form-fields";
 import { Button } from "@/components/ui/button";
-import { PlusIcon, SparkleIcon } from "lucide-react";
+import { Loader2, PlusIcon, SparkleIcon } from "lucide-react";
 import slugify from "slugify";
-import { Select, SelectTrigger } from "@/components/ui/select";
-import { SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 import { SelectField } from "@/components/form-select";
 import { FormRichTextAreaField } from "./rich-text-editor";
 import { FormFileUploaderField } from "./file-uploader-field";
+import { useTransition } from "react";
+import { tryCatch } from "@/hooks/try-catch";
+import { CreateCourse } from "../actions";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function CreateCourseForm() {
     const form = useForm<CourseSchemaType>({
@@ -31,8 +34,28 @@ export default function CreateCourseForm() {
         },
     })
 
-    async function onSubmit(data: CourseSchemaType) {
-        console.log(data);
+    const [isPending, startTransition] = useTransition()
+    const router = useRouter();
+
+    async function onSubmit(values: CourseSchemaType) {
+        console.log(values)
+        startTransition(async () => {
+            const { data: result, error } = await tryCatch(CreateCourse(values))
+
+            if (error) {
+                toast.error("An unexpected error occurred. Please try again.");
+                return;
+            }
+            if (result.status === "success") {
+                toast.success(result.message);
+                form.reset();
+                router.push("/admin/courses");
+                return;
+            } else if (result.status === "error") {
+                toast.error(result.message);
+                return;
+            }
+        })
     }
     return (
         <>
@@ -48,7 +71,7 @@ export default function CreateCourseForm() {
                         placeholder="Please Enter course title"
                         type="text"
                     />
-                    <div className="flex gap-4 items-end">
+                    <div className="flex gap-4 items-center justify-between ">
                         <FormFields
                             control={form.control}
                             className="w-full"
@@ -136,7 +159,7 @@ export default function CreateCourseForm() {
                             label="Please enter course price, ($)"
                             placeholder="0"
                             className="w-full"
-                            type="number"
+                            type="text"
                         />
                     </div>
 
@@ -149,8 +172,17 @@ export default function CreateCourseForm() {
                         placeholder="Select a status"
                         options={courseStatus}
                     />
-                    <Button>
-                        Create Course <PlusIcon className="ml-1" size={16} />
+                    <Button disabled={isPending} type="submit">
+                        {
+                            isPending ?
+                                <>
+                                    Creating Course...
+                                    <Loader2 className="animate-spin ml-1" />
+                                </> :
+                                <>
+                                    Create Course <PlusIcon className="ml-1" size={16} />
+                                </>
+                        }
                     </Button>
                 </form>
             </Form>

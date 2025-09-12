@@ -85,7 +85,7 @@ export default function UserDropDown({
                         </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                        <Link href={"/courses"}>
+                        <Link href={"/admin/courses"}>
                             <BookOpenIcon size={16} className="opacity-60" aria-hidden="true" />
                             <span>Courses</span>
                         </Link>

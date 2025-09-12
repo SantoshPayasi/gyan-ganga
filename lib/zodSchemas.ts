@@ -26,10 +26,8 @@ export const courseSchema = z.object({
     description: z.string()
         .min(3, { message: "Description must be at least 3 characters" }),
     fileKey: z.string().min(1, { message: "File key is required" }),
-    price: z.number().min(1, { message: "Price must be at least 1" }),
-    duration: z.number()
-        .min(1, { message: "Duration must be at least 1 hour" })
-        .max(500, { message: "Duration must be less than 500 hours" }),
+    price: z.transform(Number).pipe(z.number().min(1, { message: "Price must be at least 1" })),
+    duration: z.transform(Number).pipe(z.number().min(1, { message: "Duration must be at least 1 hour" }).max(100, { message: "Duration must be less than 100 hours" })),
     level: z.enum(courseLevel, { message: "Level is required" }),
     category: z.enum(courseCategory, { message: "Category is required" }),
     smallDescription: z.string()

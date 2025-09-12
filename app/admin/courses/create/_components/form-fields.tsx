@@ -2,7 +2,7 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/comp
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { CourseSchemaType } from "@/lib/zodSchemas";
-import { Control, Form } from "react-hook-form";
+import { Control, Form, useFormContext } from "react-hook-form";
 
 interface FormFieldsProps {
     control: Control<CourseSchemaType>,
@@ -24,6 +24,7 @@ interface FormTextAreaFieldsProps {
 
 
 export default function FormFields({ control, name, placeholder, className, type, label }: FormFieldsProps) {
+    // const form = useFormContext();
     return (
         <>
             <FormField

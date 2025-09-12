@@ -35,6 +35,7 @@ import {
 import Link from "next/link"
 import Image from "next/image"
 import { BookOpenIcon } from "lucide-react"
+import Logo from "@/public/logo.png"
 
 const data = {
   navMain: [
@@ -159,7 +160,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
               <Link href="/">
-                <Image src={"/logo.png"} alt="Logo" width={20} height={20} />
+                <Image src={Logo} alt="Logo" width={20} height={20} />
                 <span className="text-base font-semibold">GyanGanga</span>
               </Link>
             </SidebarMenuButton>
