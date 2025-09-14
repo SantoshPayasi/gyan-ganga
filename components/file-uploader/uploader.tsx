@@ -8,6 +8,7 @@ import { RenderEmptyState, RenderErrorState, RenderUploadedState, RenderUploadin
 import { toast } from 'sonner'
 import { v4 as uuid } from "uuid";
 import { set } from 'zod'
+import { useConstructUrl } from '@/hooks/use-construct-url'
 interface UploadInterface {
     id: string | null;
     file: File | null;
@@ -34,7 +35,8 @@ export function Uploader({ value, onChange }: iAppProps) {
         isDeleting: false,
         error: false,
         fileType: "image",
-        key: value
+        key: value,
+        objectUrl: useConstructUrl(value || "")
     })
 
 

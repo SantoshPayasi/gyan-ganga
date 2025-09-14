@@ -2,6 +2,8 @@ import { getAdminCourse } from "@/app/data/admin/admin-get-course"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsTrigger } from "@/components/ui/tabs";
 import { TabsList } from "@radix-ui/react-tabs";
+import { EditCourseForm } from "./_components/edit-form";
+import { CourseSchemaType } from "@/lib/zodSchemas";
 
 
 type Params = Promise<{ courseId: string }>
@@ -11,11 +13,19 @@ export default async function EditCoursePage({ params }: { params: Params }) {
 
     const data = await getAdminCourse(courseId);
 
+
+    const filteredData = {
+        ...data,
+        category: data.category as CourseSchemaType["category"],
+    };
+
+
+
     return (
         <div>
             <h1 className="tet-3xl font-bold mb-8">
                 Edit Course
-                <span className="text-primary underline">{data.title}</span>
+                <span className="text-primary underline">{filteredData.title}</span>
             </h1>
             <Tabs defaultValue="basic-info" className="w-full">
                 <TabsList className="grid grid-cols-2 w-full">
@@ -28,7 +38,9 @@ export default async function EditCoursePage({ params }: { params: Params }) {
                             <CardTitle>Basic Information</CardTitle>
                             <CardDescription>Provide basic information about the course</CardDescription>
                         </CardHeader>
-                        <CardContent></CardContent>
+                        <CardContent>
+                            <EditCourseForm courseId={courseId} filteredData={filteredData} />
+                        </CardContent>
                     </Card>
                 </TabsContent>
 

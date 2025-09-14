@@ -21,7 +21,8 @@ export async function getAdminCourse(courseId: string) {
             slug: true,
             duration: true,
             createdAt: true,
-            updatedAt: true
+            updatedAt: true,
+            category: true,
         }
     });
 

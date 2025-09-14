@@ -79,3 +79,5 @@ export async function CreateCourse(data: CourseSchemaType): Promise<APiResponse>
         }
     }
 }
+
+

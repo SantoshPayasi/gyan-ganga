@@ -1,9 +1,25 @@
-"use client"
+import CourseForm from "@/components/courseForms/form";
+import { CourseSchemaType } from "@/lib/zodSchemas";
+import { updateCourse } from "../action";
 
-export async function EditCourseForm() {
+interface iAppProps {
+    courseId: string,
+    filteredData: CourseSchemaType
+}
+
+export async function EditCourseForm({ courseId, filteredData }: iAppProps) {
+
+    async function handleEdit(values: CourseSchemaType) {
+        "use server";
+        return updateCourse(values, courseId);
+    }
+
+
     return (
-        <div>
-            Edit Form
-        </div>
+        <CourseForm
+            mode="edit"
+            defaultValues={filteredData}
+            SubmitHandler={handleEdit}
+        />
     )
 }
