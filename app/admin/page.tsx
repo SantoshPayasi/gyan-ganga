@@ -5,7 +5,9 @@ import { SectionCards } from "@/components/sidebar/section-cards"
 
 import data from "./data.json"
 
-export default function Page() {
+
+export default async function Page() {
+
   return (
     <>
       <SectionCards />

@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 import { env } from "@/lib/env";
 import { APiResponse } from "@/lib/types";
 import { courseSchema, CourseSchemaType } from "@/lib/zodSchemas";
+import { request } from "@arcjet/next";
 
 const aj = Arcjet.withRule(
     detectBot({
@@ -23,6 +24,30 @@ const aj = Arcjet.withRule(
 export async function updateCourse(values: CourseSchemaType, id: string): Promise<APiResponse> {
     const session = await requireAdmin();
     try {
+        const req = await request();
+        const decision = await aj.protect(req, {
+            fingerprint: session?.user.id as string
+        });
+
+        if (decision.isDenied()) {
+            if (decision.reason.isRateLimit()) {
+                return {
+                    status: 'error',
+                    message: "You have blocked due to rate limiting"
+                }
+            }
+            else if (decision.reason.isBot()) {
+                return {
+                    status: 'error',
+                    message: "You have blocked due to bot detection"
+                }
+            } else {
+                return {
+                    status: 'error',
+                    message: "Looks like malicious user"
+                }
+            }
+        }
         const validation = courseSchema.safeParse(values);
         if (!validation.success) {
             return {
