@@ -4,7 +4,7 @@ import { Arcjet, detectBot, fixedWindow } from "@/lib/arcjet";
 import { prisma } from "@/lib/db";
 import { env } from "@/lib/env";
 import { APiResponse } from "@/lib/types";
-import { courseSchema, CourseSchemaType } from "@/lib/zodSchemas";
+import { chapterSchema, courseSchema, CourseSchemaType } from "@/lib/zodSchemas";
 import { request } from "@arcjet/next";
 import { revalidatePath } from "next/cache";
 
@@ -232,6 +232,77 @@ export async function reorderChapter(courseID: string, chapters: { id: string, p
         return {
             status: "error",
             message: "Unable to reorder chapters."
+        }
+    }
+}
+
+
+
+export async function createChapter(values: { name: string, courseId: string }): Promise<APiResponse> {
+    const session = await requireAdmin();
+    try {
+        const req = await request();
+        const decision = await aj.protect(req, {
+            fingerprint: session?.user.id as string
+        });
+
+        if (decision.isDenied()) {
+            if (decision.reason.isRateLimit()) {
+                return {
+                    status: 'error',
+                    message: "You have blocked due to rate limiting"
+                }
+            } else if (decision.reason.isBot()) {
+                return {
+                    status: 'error',
+                    message: "You have blocked due to bot detection"
+                }
+            }
+            else {
+                return {
+                    status: 'error',
+                    message: "Looks like malicious user"
+                }
+            }
+        }
+
+        const validation = chapterSchema.safeParse(values);
+        if (!validation.success) {
+            return {
+                status: "error",
+                message: validation.error.issues.map((issue) => issue.message).join(", ")
+            }
+        }
+
+        await prisma.$transaction(async (tx) => {
+            const maxPosition = await tx.chapter.findFirst({
+                where: {
+                    courseId: values.courseId
+                },
+                select: { position: true },
+                orderBy: {
+                    position: 'desc'
+                }
+            });
+
+            await tx.chapter.create({
+                data: {
+                    title: validation.data.name,
+                    courseId: validation.data.courseId,
+                    position: maxPosition ? maxPosition.position + 1 : 1,
+                }
+            });
+        })
+        revalidatePath(`/admin/courses/${values.courseId}/edit`);
+
+        return {
+            status: "success",
+            message: "Chapter created Successfully"
+        }
+    } catch (error) {
+        return {
+            status: "error",
+            message: "Unable to create the chapter"
         }
     }
 }

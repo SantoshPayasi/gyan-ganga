@@ -14,6 +14,7 @@ import { CollapsibleContent } from "@/components/ui/collapsible";
 import Link from "next/link";
 import { toast } from "sonner";
 import { reorderChapter, reorderLessons } from "../action";
+import NewChapterModal from "./new-chapter-modal";
 
 
 interface iAppProps {
@@ -254,6 +255,7 @@ export function CourseStructure({ data }: iAppProps) {
         <DndContext collisionDetection={rectIntersection} onDragEnd={handleDragEnd} sensors={sensors}>
             <CardHeader className="flex flex-row items-center justify-between border-b border-border mb-6">
                 <CardTitle>Chapters</CardTitle>
+                <NewChapterModal courseId={data.id} />
             </CardHeader>
             <CardContent className="space-y-8">
                 <SortableContext
