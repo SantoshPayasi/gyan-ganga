@@ -4,25 +4,24 @@ import { tryCatch } from "@/hooks/try-catch";
 import { AlertDialogTitle } from "@radix-ui/react-alert-dialog";
 import { Loader, Trash2 } from "lucide-react";
 import { useState, useTransition } from "react";
-import { deleteLesson } from "./actions";
+import { deleteChapter } from "./actions";
 import { toast } from "sonner";
 
 interface iAppProps {
     courseId: string
     chapterId: string
-    lessonId: string
 }
-export function DeleteLesson({
+export function DeleteChapter({
     courseId,
-    chapterId,
-    lessonId }
+    chapterId
+}
     : iAppProps) {
     const [open, setOpen] = useState(false)
     const [pending, startTransition] = useTransition();
 
     async function onSubmit() {
         startTransition(async () => {
-            const { data, error } = await tryCatch(deleteLesson({ courseId, chapterId, lessonId }));
+            const { data, error } = await tryCatch(deleteChapter({ courseId, chapterId }));
             if (error) {
                 toast.error(error.message || "Something went wrong");
             }

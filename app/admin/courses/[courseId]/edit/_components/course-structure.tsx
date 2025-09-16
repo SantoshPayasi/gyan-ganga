@@ -17,6 +17,7 @@ import { reorderChapter, reorderLessons } from "../action";
 import NewChapterModal from "./new-chapter-modal";
 import NewLeesonModal from "./lessons/new-lesson-modal";
 import { DeleteLesson } from "./lessons/delete-lesson-dialog";
+import { DeleteChapter } from "./chapters/delete-chapter-dialog";
 
 
 interface iAppProps {
@@ -287,9 +288,7 @@ export function CourseStructure({ data }: iAppProps) {
                                                     </CollapsibleTrigger>
                                                     <p className="cursor-pointer hover:text-primary">{chapter.title}</p>
                                                 </div>
-                                                <Button variant={"outline"} size={"icon"}>
-                                                    <Trash2 className="size-4" />
-                                                </Button>
+                                                <DeleteChapter chapterId={chapter.id} courseId={data.id} />
                                             </div>
                                             <CollapsibleContent>
                                                 <div className="p-1">
