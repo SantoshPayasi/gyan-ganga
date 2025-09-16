@@ -48,6 +48,9 @@ const NewLeesonModal = ({ courseId, chapterId }: iAppProps) => {
     }
 
     function handleOpenChange(open: boolean) {
+        if (open) {
+            form.reset();
+        }
         setIsOpen(open);
     }
 
