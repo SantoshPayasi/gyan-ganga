@@ -7,7 +7,6 @@ import { cn } from '@/lib/utils'
 import { RenderEmptyState, RenderErrorState, RenderUploadedState, RenderUploadingState } from './render-state'
 import { toast } from 'sonner'
 import { v4 as uuid } from "uuid";
-import { set } from 'zod'
 import { useConstructUrl } from '@/hooks/use-construct-url'
 interface UploadInterface {
     id: string | null;
@@ -24,9 +23,10 @@ interface UploadInterface {
 
 interface iAppProps {
     value?: string,
-    onChange?: (value: string) => void
+    onChange?: (value: string) => void,
+    fileTypeAccepted: "image" | "video"
 }
-export function Uploader({ value, onChange }: iAppProps) {
+export function Uploader({ value, onChange, fileTypeAccepted }: iAppProps) {
     const [fileState, setFileState] = useState<UploadInterface>({
         id: uuid(),
         file: null,
@@ -34,13 +34,13 @@ export function Uploader({ value, onChange }: iAppProps) {
         progress: 0,
         isDeleting: false,
         error: false,
-        fileType: "image",
+        fileType: fileTypeAccepted,
         key: value,
         objectUrl: useConstructUrl(value || "")
     })
 
 
-    const uploadFile = async (file: File) => {
+    const uploadFile = useCallback(async (file: File) => {
         setFileState((prev) => ({
             ...prev,
             uploading: true
@@ -59,7 +59,7 @@ export function Uploader({ value, onChange }: iAppProps) {
                     fileName: file.name,
                     contentType: file.type,
                     size: file.size,
-                    isImage: true
+                    isImage: fileTypeAccepted === "image" ? true : false
                 })
             })
 
@@ -89,7 +89,7 @@ export function Uploader({ value, onChange }: iAppProps) {
 
 
                 xhr.onload = () => {
-                    console.log(xhr.response, xhr.status)
+
                     if (xhr.status === 200 || xhr.status === 204) {
                         setFileState((prev) => ({
                             ...prev,
@@ -114,7 +114,6 @@ export function Uploader({ value, onChange }: iAppProps) {
                 };
 
                 xhr.onerror = () => {
-                    console.log(xhr.response, xhr.status)
                     setFileState((prev) => ({
                         ...prev,
                         uploading: false,
@@ -125,7 +124,6 @@ export function Uploader({ value, onChange }: iAppProps) {
                     reject(new Error("Failed to upload file"));
                 };
 
-                console.log(signedUrl, file)
 
                 xhr.open("PUT", signedUrl);
 
@@ -143,7 +141,112 @@ export function Uploader({ value, onChange }: iAppProps) {
                 error: true
             }))
         }
-    }
+    }, [fileTypeAccepted, onChange])
+
+    // const uploadFile = async (file: File) => {
+    //     setFileState((prev) => ({
+    //         ...prev,
+    //         uploading: true
+    //     }))
+
+
+    //     try {
+    //         //1. Get Presigned Url
+
+    //         const presignedResponse = await fetch("/api/s3/upload", {
+    //             method: "POST",
+    //             headers: {
+    //                 "Content-Type": "application/json"
+    //             },
+    //             body: JSON.stringify({
+    //                 fileName: file.name,
+    //                 contentType: file.type,
+    //                 size: file.size,
+    //                 isImage: fileTypeAccepted === "image" ? true : false
+    //             })
+    //         })
+
+    //         if (!presignedResponse.ok) {
+    //             setFileState((prev) => ({
+    //                 ...prev,
+    //                 uploading: false,
+    //                 progress: 0,
+    //                 error: true
+    //             }))
+    //         }
+
+    //         const { signedUrl, key } = await presignedResponse.json();
+
+    //         await new Promise<void>((resolve, reject) => {
+    //             const xhr = new XMLHttpRequest();
+    //             xhr.upload.onprogress = (event) => {
+    //                 console.log(event.loaded, event.total)
+    //                 if (event.lengthComputable) {
+    //                     const percentage = Math.round((event.loaded / event.total) * 100);
+    //                     setFileState((prev) => ({
+    //                         ...prev,
+    //                         progress: percentage
+    //                     }))
+    //                 }
+    //             };
+
+
+    //             xhr.onload = () => {
+    //                 console.log(xhr.response, xhr.status)
+    //                 if (xhr.status === 200 || xhr.status === 204) {
+    //                     setFileState((prev) => ({
+    //                         ...prev,
+    //                         uploading: false,
+    //                         progress: 100,
+    //                         key: key
+    //                     }))
+    //                     onChange && onChange(key);
+    //                     toast.success("File uploaded successfully")
+    //                     resolve();
+    //                 } else {
+    //                     setFileState((prev) => ({
+    //                         ...prev,
+    //                         uploading: false,
+    //                         progress: 0,
+    //                         error: true
+    //                     }))
+    //                     toast.error("Failed to upload file")
+    //                     reject(new Error("Failed to upload file"));
+    //                 }
+
+    //             };
+
+    //             xhr.onerror = () => {
+    //                 console.log(xhr.response, xhr.status)
+    //                 setFileState((prev) => ({
+    //                     ...prev,
+    //                     uploading: false,
+    //                     progress: 0,
+    //                     error: true
+    //                 }))
+    //                 toast.error("Failed to upload file")
+    //                 reject(new Error("Failed to upload file"));
+    //             };
+
+    //             console.log(signedUrl, file)
+
+    //             xhr.open("PUT", signedUrl);
+
+    //             xhr.setRequestHeader("Content-Type", file.type);
+
+    //             xhr.send(file);
+
+    //         })
+    //     } catch (error) {
+    //         toast.error("Failed to upload file");
+    //         setFileState((prev) => ({
+    //             ...prev,
+    //             uploading: false,
+    //             progress: 0,
+    //             error: true
+    //         }))
+    //     }
+    // }
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
         if (fileState.objectUrl && !fileState.objectUrl.startsWith("http")) {
@@ -158,7 +261,7 @@ export function Uploader({ value, onChange }: iAppProps) {
                 progress: 0,
                 isDeleting: false,
                 error: false,
-                fileType: "image",
+                fileType: fileTypeAccepted,
                 objectUrl: URL.createObjectURL(file)
             })
 
@@ -212,7 +315,7 @@ export function Uploader({ value, onChange }: iAppProps) {
                 progress: 0,
                 isDeleting: false,
                 error: false,
-                fileType: "image",
+                fileType: fileTypeAccepted,
                 objectUrl: ""
             }))
 
@@ -246,10 +349,10 @@ export function Uploader({ value, onChange }: iAppProps) {
     const { getRootProps, getInputProps, isDragActive } = useDropzone(
         {
             onDrop,
-            accept: { "image/*": [] },
+            accept: fileTypeAccepted === "video" ? { "video/*": [] } : { "image/*": [] },
             maxFiles: 1,
             multiple: false,
-            maxSize: 5 * 1024 * 1024,
+            maxSize: fileTypeAccepted === "image" ? 5 * 1024 * 1024 : 30 * 1024 * 1024,
             onDropRejected: onDropRejecteds,
             disabled: fileState.uploading || !!fileState.objectUrl
         }
@@ -266,7 +369,7 @@ export function Uploader({ value, onChange }: iAppProps) {
         }
 
         if (fileState.objectUrl) {
-            return <RenderUploadedState previewUrl={fileState.objectUrl} handleRemoveFile={handleRemoveFile} isDeleting={fileState.isDeleting} />
+            return <RenderUploadedState previewUrl={fileState.objectUrl} handleRemoveFile={handleRemoveFile} isDeleting={fileState.isDeleting} fileType={fileState.fileType} />
         }
 
         return <RenderEmptyState isDragActive={isDragActive} />

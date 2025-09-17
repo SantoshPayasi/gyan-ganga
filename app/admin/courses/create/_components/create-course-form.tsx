@@ -1,21 +1,5 @@
 "use client";
-
-import { courseCategory, courseLevel, courseSchema, CourseSchemaType, courseStatus } from "@/lib/zodSchemas";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import FormFields, { FormTextAreaField } from "./form-fields";
-import { Button } from "@/components/ui/button";
-import { Loader2, PlusIcon, SparkleIcon } from "lucide-react";
-import slugify from "slugify";
-import { SelectField } from "@/components/form-select";
-import { FormRichTextAreaField } from "./rich-text-editor";
-import { FormFileUploaderField } from "./file-uploader-field";
-import { useTransition } from "react";
-import { tryCatch } from "@/hooks/try-catch";
 import { CreateCourse } from "../actions";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import CourseForm from "@/components/courseForms/form";
 
 // export default function CreateCourseForm() {

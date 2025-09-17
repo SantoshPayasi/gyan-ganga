@@ -7,7 +7,7 @@ import React, { useState, useTransition } from 'react'
 import NewChapterForm from './new-chapter-form';
 import { chapterSchema, ChapterSchemaType } from '@/lib/zodSchemas';
 import { tryCatch } from '@/hooks/try-catch';
-import { createChapter } from '../action';
+import { createChapter } from '../../action';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';

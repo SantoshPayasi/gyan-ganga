@@ -9,9 +9,10 @@ interface Props {
 }
 
 interface UploadCompletedProps {
-    previewUrl: string,
-    isDeleting: boolean,
-    handleRemoveFile: () => void
+    previewUrl: string;
+    isDeleting: boolean;
+    handleRemoveFile: () => void;
+    fileType: 'image' | 'video'
 }
 
 
@@ -54,10 +55,21 @@ export function RenderErrorState() {
 }
 
 
-export function RenderUploadedState({ previewUrl, isDeleting, handleRemoveFile }: UploadCompletedProps) {
+export function RenderUploadedState({ previewUrl, isDeleting, handleRemoveFile, fileType }: UploadCompletedProps) {
     return (
-        <div className="text-center">
-            <Image src={previewUrl} alt="Uploaded Image" fill className="object-contain p-2" />
+        <div className="relative group w-full h-full justify-center items-center">
+            {
+                fileType === 'video' ? (
+                    <video src={previewUrl} controls className="rounded-md w-full h-full" />
+                ) : (
+                    <Image
+                        src={previewUrl}
+                        alt="Uploaded Image"
+                        fill
+                        className="object-contain p-2"
+                    />
+                )
+            }
             <Button variant={"destructive"} size={"icon"} className={cn(
                 'absolute top-4 right-4'
             )}

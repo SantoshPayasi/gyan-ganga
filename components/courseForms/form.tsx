@@ -3,21 +3,21 @@
 import { courseCategory, courseLevel, courseSchema, CourseSchemaType, courseStatus } from "@/lib/zodSchemas";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
 import FormFields, { FormTextAreaField } from "./components/form-fields";
 import { Button } from "@/components/ui/button";
 import { Loader2, PlusIcon, SparkleIcon } from "lucide-react";
 import slugify from "slugify";
 import { SelectField } from "@/components/form-select";
 
-import { FormFileUploaderField } from "./components/file-uploader-field";
-import { useTransition } from "react";
+
+import { useEffect, useTransition } from "react";
 import { tryCatch } from "@/hooks/try-catch";
-import { CreateCourse } from "@/app/admin/courses/create/actions";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { FormRichTextAreaField } from "./components/rich-text-editor";
 import { APiResponse } from "@/lib/types";
+import { FormFileUploaderField } from "../advanced-components/file-uploader-file";
+import { FormRichTextAreaField } from "../advanced-components/rich-text-editor";
 
 interface iAppProps {
     defaultValues?: CourseSchemaType,
@@ -25,6 +25,7 @@ interface iAppProps {
     SubmitHandler: (values: CourseSchemaType) => Promise<APiResponse>
 }
 export default function CourseForm({ defaultValues, mode, SubmitHandler }: iAppProps) {
+
     const form = useForm<CourseSchemaType>({
         resolver: zodResolver(courseSchema),
         defaultValues: {
@@ -108,7 +109,7 @@ export default function CourseForm({ defaultValues, mode, SubmitHandler }: iAppP
                     />
 
 
-                    <FormRichTextAreaField
+                    <FormRichTextAreaField<CourseSchemaType>
                         control={form.control}
                         name="description"
                         label="Description"
@@ -125,12 +126,13 @@ export default function CourseForm({ defaultValues, mode, SubmitHandler }: iAppP
                         className="w-full"
                         type="text"
                     /> */}
-                    <FormFileUploaderField
+                    <FormFileUploaderField<CourseSchemaType>
                         control={form.control}
                         name="fileKey"
                         label="Thumbnail Image"
                         placeholder="thumbnail url"
                         className="w-full"
+                        fileTypeAccepted="image"
                     />
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -14,7 +14,7 @@ import { CollapsibleContent } from "@/components/ui/collapsible";
 import Link from "next/link";
 import { toast } from "sonner";
 import { reorderChapter, reorderLessons } from "../action";
-import NewChapterModal from "./new-chapter-modal";
+import NewChapterModal from "./chapters/new-chapter-modal";
 import NewLeesonModal from "./lessons/new-lesson-modal";
 import { DeleteLesson } from "./lessons/delete-lesson-dialog";
 import { DeleteChapter } from "./chapters/delete-chapter-dialog";
