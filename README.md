@@ -40,3 +40,136 @@ Example:
 
 ## 📂 Project Structure
 
+```
+/
+├── app/             # Next.js app directory (routes, layouts, server components)
+├── components/      # Reusable UI components
+├── hooks/           # Custom React/Next.js hooks
+├── lib/             # Utility functions & helpers
+├── prisma/          # Database schema & migrations
+├── public/          # Static assets (images, icons, etc.)
+├── .gitignore
+├── middleware.ts
+├── next.config.ts
+├── tsconfig.json
+└── package.json
+```
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js (>= 18.x recommended)  
+- pnpm / npm / yarn  
+- PostgreSQL database (local or hosted, e.g. Neon)  
+
+### Setup
+
+1. **Clone the repository**
+
+   ```bash
+   git clone https://github.com/SantoshPayasi/gyan-ganga.git
+   cd gyan-ganga
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   pnpm install
+   # or
+   npm install
+   # or
+   yarn install
+   ```
+
+3. **Configure environment variables**
+
+   Create `.env.local` in the root:
+
+   ```env
+   DATABASE_URL="your_database_url_here"
+   NEXTAUTH_SECRET="your_secret_here"
+   ```
+
+4. **Generate Prisma client & run migrations**
+
+   ```bash
+   npx prisma generate
+   npx prisma migrate dev
+   ```
+
+5. **Run the development server**
+
+   ```bash
+   pnpm dev
+   # or npm run dev
+   # or yarn dev
+   ```
+
+6. Open **http://localhost:3000** in your browser 🎉
+
+---
+
+## 📜 Available Scripts
+
+| Command | Description |
+|---------|-------------|
+| `dev`   | Run the development server with hot reloading |
+| `build` | Build the app for production |
+| `start` | Start the production server |
+| `lint`  | Run ESLint checks |
+| `prisma` | Database schema & migrations commands |
+
+---
+
+## ✨ Features
+
+- 🔑 Authentication & secure access  
+- 📚 Course / content management  
+- 📝 Collaboration tools (comments, discussions)  
+- 📡 Real-time updates / notifications (planned)  
+- 🎨 Clean & responsive UI  
+- 📈 Scalable architecture  
+
+---
+
+## 🗺 Roadmap
+
+- [ ] Role-based access (Admin / Teacher / Student)  
+- [ ] Video & media content integration  
+- [ ] Analytics dashboard  
+- [ ] PWA (Progressive Web App) support  
+- [ ] Multi-language support  
+- [ ] End-to-end tests & CI/CD pipelines  
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! 🎉  
+
+1. Fork the repo  
+2. Create a feature branch: `git checkout -b feature/amazing-feature`  
+3. Commit changes: `git commit -m "feat: add amazing feature"`  
+4. Push branch: `git push origin feature/amazing-feature`  
+5. Open a Pull Request 🚀  
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License**.  
+See the [LICENSE](LICENSE) file for more details.
+
+---
+
+## 👨‍💻 Author
+
+**Santosh Payasi**  
+🔗 [GitHub](https://github.com/SantoshPayasi) | 💼 (Add LinkedIn/Portfolio link here)
+
+---
+
+⭐ If you like this project, don’t forget to **star the repo**!
