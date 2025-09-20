@@ -1,11 +1,13 @@
 import { getSingleCourse } from "@/app/data/course/get-course";
 import { RenderDescription } from "@/components/rish-text-editor/render-description";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Separator } from "@/components/ui/separator";
 import { useConstructUrl } from "@/hooks/use-construct-url";
 import { IconBook, IconCategory, IconChartBar, IconChevronDown, IconClock, IconPlayerPlay } from "@tabler/icons-react";
+import { CheckIcon } from "lucide-react";
 import Image from "next/image";
 
 
@@ -69,7 +71,7 @@ export default async function Page({ params }: { params: Params }) {
 
                         </div>
                     </div>
-                    <div className="space-y-4">
+                    <div className="space-y-4 mb-5">
                         {
                             course.chapter.map((chapter, index) => (
                                 <Collapsible key={chapter.id} defaultOpen={index === 0}>
@@ -200,6 +202,31 @@ export default async function Page({ params }: { params: Params }) {
                                     </div>
                                 </div>
                             </div>
+                            <div className="mb-6 space-y-3">
+                                <h4>This course includes:</h4>
+                                <ul className="space-y-2">
+                                    <li className="flex items-center gap-2 text-sm">
+                                        <div className="rounded-full bg-green-500/10 text-green-500">
+                                            <CheckIcon className="size-3" />
+                                        </div>
+                                        <span>Full lifetime access</span>
+                                    </li>
+                                    <li className="flex items-center gap-2 text-sm">
+                                        <div className="rounded-full bg-green-500/10 text-green-500">
+                                            <CheckIcon className="size-3" />
+                                        </div>
+                                        <span>Access on mobile and desktop</span>
+                                    </li>
+                                    <li className="flex items-center gap-2 text-sm">
+                                        <div className="rounded-full bg-green-500/10 text-green-500">
+                                            <CheckIcon className="size-3" />
+                                        </div>
+                                        <span>Certificate after completion</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <Button className="w-full">Enroll Now!</Button>
+                            <p className="text-xs mt-3 text-muted-foreground text-center ">30 day money back guarantee</p>
                         </CardContent>
                     </Card>
                 </div>
