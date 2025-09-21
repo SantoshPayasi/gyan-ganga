@@ -7,6 +7,7 @@ import { APiResponse } from "@/lib/types";
 import { courseSchema, CourseSchemaType } from "@/lib/zodSchemas";
 import { env } from "@/lib/env";
 import { request } from "@arcjet/next";
+import { stripe } from "@/lib/stripe";
 
 
 const aj = Arcjet.withRule(
@@ -60,10 +61,20 @@ export async function CreateCourse(data: CourseSchemaType): Promise<APiResponse>
             }
         }
 
+        const striptProduct = await stripe.products.create({
+            name: validation.data.title,
+            description: validation.data.smallDescription,
+            default_price_data: {
+                currency: "usd",
+                unit_amount: validation.data.price * 100
+            }
+        })
+
         const result = await prisma.course.create({
             data: {
                 ...validation.data,
-                userId: session?.user.id as string
+                userId: session?.user.id as string,
+                sripePriceId: striptProduct.default_price as string
             }
         })
 
