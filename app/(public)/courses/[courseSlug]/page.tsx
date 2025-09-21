@@ -9,6 +9,9 @@ import { useConstructUrl } from "@/hooks/use-construct-url";
 import { IconBook, IconCategory, IconChartBar, IconChevronDown, IconClock, IconPlayerPlay } from "@tabler/icons-react";
 import { CheckIcon } from "lucide-react";
 import Image from "next/image";
+import { enrollInCourseAction } from "./action";
+import { checkIsCourseBought } from "@/app/data/user/user-is-enrolled";
+import Link from "next/link";
 
 
 type Params = Promise<{
@@ -20,6 +23,8 @@ export default async function Page({ params }: { params: Params }) {
     const { courseSlug } = await params;
     const course = await getSingleCourse(courseSlug);
     const thumbnailUrl = useConstructUrl(course.fileKey);
+
+    const isEnrolled = await checkIsCourseBought(course.id);
     return (
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3 mt-5">
             <div className="order-1 lg:col-span-2">
@@ -225,7 +230,21 @@ export default async function Page({ params }: { params: Params }) {
                                     </li>
                                 </ul>
                             </div>
-                            <Button className="w-full">Enroll Now!</Button>
+                            {
+                                isEnrolled ?
+                                    (
+                                        <Link href={"/dashboard"}>
+                                            Watch Course
+                                        </Link>
+                                    ) :
+                                    (
+                                        <Button className="w-full">
+                                            Enroll Now!
+                                        </Button>
+                                    )
+                            }
+
+
                             <p className="text-xs mt-3 text-muted-foreground text-center ">30 day money back guarantee</p>
                         </CardContent>
                     </Card>

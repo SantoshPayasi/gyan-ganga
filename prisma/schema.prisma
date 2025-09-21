@@ -15,7 +15,7 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(uuid())
+  id            String       @id @default(uuid())
   name          String
   email         String
   emailVerified Boolean
@@ -25,6 +25,9 @@ model User {
   sessions      Session[]
   accounts      Account[]
   Courses       Course[]
+  enrollment    Enrollment[]
+
+  stripeCustomerId String?
 
   role       String?
   banned     Boolean?  @default(false)
@@ -104,6 +107,8 @@ model Course {
   userId    String
 
   chapter Chapter[]
+
+  enrollment Enrollment[]
 }
 
 enum CourseLevel {
@@ -148,4 +153,28 @@ model Lesson {
   position  Int
   Chapter   Chapter? @relation(fields: [chapterId], references: [id], onDelete: Cascade)
   chapterId String?
+}
+
+model Enrollment {
+  id String @id @default(ulid())
+
+  amount Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId String
+  User     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId   String
+
+  status EnrollmentStatus @default(Pending)
+
+  @@unique([userId, courseId])
+}
+
+enum EnrollmentStatus {
+  Pending
+  Active
+  Cancelled
 }
