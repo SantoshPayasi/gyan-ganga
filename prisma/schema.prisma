@@ -27,7 +27,7 @@ model User {
   Courses       Course[]
   enrollment    Enrollment[]
 
-  stripeCustomerId String?
+  stripeCustomerId String? @unique
 
   role       String?
   banned     Boolean?  @default(false)

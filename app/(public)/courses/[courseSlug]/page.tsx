@@ -1,7 +1,6 @@
 import { getSingleCourse } from "@/app/data/course/get-course";
 import { RenderDescription } from "@/components/rish-text-editor/render-description";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Separator } from "@/components/ui/separator";
@@ -9,9 +8,10 @@ import { useConstructUrl } from "@/hooks/use-construct-url";
 import { IconBook, IconCategory, IconChartBar, IconChevronDown, IconClock, IconPlayerPlay } from "@tabler/icons-react";
 import { CheckIcon } from "lucide-react";
 import Image from "next/image";
-import { enrollInCourseAction } from "./action";
 import { checkIsCourseBought } from "@/app/data/user/user-is-enrolled";
 import Link from "next/link";
+import { EnrollMentButton } from "./_components/enrollment-button";
+import { buttonVariants } from "@/components/ui/button";
 
 
 type Params = Promise<{
@@ -233,14 +233,12 @@ export default async function Page({ params }: { params: Params }) {
                             {
                                 isEnrolled ?
                                     (
-                                        <Link href={"/dashboard"}>
+                                        <Link href={"/dashboard"} className={buttonVariants({ className: "w-full" })}>
                                             Watch Course
                                         </Link>
                                     ) :
                                     (
-                                        <Button className="w-full">
-                                            Enroll Now!
-                                        </Button>
+                                        <EnrollMentButton courseId={course.id} />
                                     )
                             }
 

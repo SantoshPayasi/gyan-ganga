@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import Logo from "@/public/logo.png"
+import { ConfettiProvider } from "@/hooks/useConfetti";
 
 const monaSans = Mona_Sans({
   variable: "--font-mona-sans",
@@ -30,15 +31,17 @@ export default function RootLayout({
       <body
         className={`${monaSans.variable} antialiased`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-          <Toaster />
-        </ThemeProvider>
+        <ConfettiProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+            <Toaster />
+          </ThemeProvider>
+        </ConfettiProvider>
       </body>
     </html>
   );
