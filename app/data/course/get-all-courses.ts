@@ -17,7 +17,8 @@ export async function getAllCourses() {
             id: true,
             level: true,
             duration: true,
-            category: true
+            category: true,
+            status: true
         }
     });
 
