@@ -21,6 +21,7 @@ export async function getEnrolledCourses() {
                     level: true,
                     duration: true,
                     status: true,
+                    slug: true,
                     chapter: {
                         select: {
                             id: true,
