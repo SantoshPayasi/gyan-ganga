@@ -81,6 +81,7 @@ export const config = {
         "/admin/:path*", // protect admin pages
         "/api/:path*",   // apply arcjet rules to API routes
     ],
+    runtime: "nodejs"
 };
 
 // ✅ Middleware runner
