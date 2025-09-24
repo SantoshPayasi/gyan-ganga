@@ -8,7 +8,8 @@
     "start": "next start",
     "db:migrage": "pnpm dlx prisma migrate dev",
     "db:push": "pnpm dlx prisma db push",
-    "lint": "eslint"
+    "lint": "eslint",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@arcjet/inspect": "1.0.0-beta.11",
