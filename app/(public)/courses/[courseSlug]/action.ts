@@ -21,7 +21,7 @@ const aj = Arcjet.withRule(
 )
 
 export async function enrollInCourseAction(courseId: string): Promise<APiResponse | never> {
-    const { user } = await requireUser();
+    const user = await requireUser();
     let checkouturl: string;
     try {
         const req = await request();

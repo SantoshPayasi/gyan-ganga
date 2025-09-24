@@ -20,7 +20,7 @@ export async function adminGetEnrollments() {
 
     })
 
-    let lastthirtyDays: { date: string, enrollments: number }[] = [];
+    const lastthirtyDays: { date: string, enrollments: number }[] = [];
 
 
     for (let index = 29; index >= 0; index--) {

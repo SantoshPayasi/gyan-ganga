@@ -6,14 +6,14 @@ import { APiResponse } from "@/lib/types";
 import { revalidatePath } from "next/cache";
 
 export async function markLessonComplete(lessonId: string, slug: string): Promise<APiResponse> {
-    const uid = await requireUser();
+    const user = await requireUser();
 
     try {
 
         await prisma.lessonProgrss.upsert({
             where: {
                 userId_lessonId: {
-                    userId: uid,
+                    userId: user.id,
                     lessonId: lessonId
                 }
             },
@@ -21,7 +21,7 @@ export async function markLessonComplete(lessonId: string, slug: string): Promis
                 completed: true
             },
             create: {
-                userId: uid,
+                userId: user.id,
                 lessonId: lessonId,
                 completed: true
             }

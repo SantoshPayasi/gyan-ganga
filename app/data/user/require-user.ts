@@ -10,6 +10,6 @@ export const requireUser = cache(
         if (!user) {
             redirect("/login");
         }
-        return user.user.id
+        return user.user
     }
 )

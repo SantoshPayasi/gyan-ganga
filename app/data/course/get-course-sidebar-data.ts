@@ -4,7 +4,7 @@ import { prisma } from "@/lib/db";
 import { notFound } from "next/navigation";
 
 export async function getCourseSidebarData(slug: string) {
-    const useriD = await requireUser();
+    const user = await requireUser();
 
     const course = await prisma.course.findUnique({
         where: {
@@ -30,7 +30,7 @@ export async function getCourseSidebarData(slug: string) {
                             position: true,
                             lessonProgrss: {
                                 where: {
-                                    userId: useriD
+                                    userId: user.id
                                 },
                                 select: {
                                     completed: true,
@@ -59,7 +59,7 @@ export async function getCourseSidebarData(slug: string) {
     const enrollment = await prisma.enrollment.findUnique({
         where: {
             userId_courseId: {
-                userId: useriD,
+                userId: user.id,
                 courseId: course.id
             }
         }

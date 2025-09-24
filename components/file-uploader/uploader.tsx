@@ -97,7 +97,9 @@ export function Uploader({ value, onChange, fileTypeAccepted }: iAppProps) {
                             progress: 100,
                             key: key
                         }))
-                        onChange && onChange(key);
+                        if (onChange) {
+                            onChange("");
+                        }
                         toast.success("File uploaded successfully")
                         resolve();
                     } else {
@@ -305,8 +307,9 @@ export function Uploader({ value, onChange, fileTypeAccepted }: iAppProps) {
             if (fileState.objectUrl && !fileState.objectUrl.startsWith("http")) {
                 URL.revokeObjectURL(fileState.objectUrl);
             }
-
-            onChange && onChange("")
+            if (onChange) {
+                onChange("");
+            }
 
             setFileState((prev) => ({
                 id: null,
