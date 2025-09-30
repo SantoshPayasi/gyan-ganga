@@ -9,7 +9,6 @@ type Params = Promise<{
 
 export default async function LessonContentPage({ params }: { params: Params }) {
     const { lessonId } = await params;
-    const lessonData = await getLessonContent(lessonId);
     return (
         <Suspense fallback={<LessonSkeleton />}>
             <LessonContentLoader lessonId={lessonId} />

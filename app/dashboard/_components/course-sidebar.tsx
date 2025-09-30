@@ -1,9 +1,8 @@
 "use client"
 import { CourseSidebarData } from '@/app/data/course/get-course-sidebar-data'
 import { Button } from '@/components/ui/button'
-import { CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { Progress } from '@/components/ui/progress'
-import { Collapsible } from '@radix-ui/react-collapsible'
 import { ChevronDown, Play } from 'lucide-react'
 import React from 'react'
 import { LessonItem } from './lesson-item'
@@ -13,6 +12,7 @@ import { useCourseProgress } from '@/hooks/use-course-progress'
 interface iAppProps {
     courseData: CourseSidebarData["course"]
 }
+
 
 const CourseSideBar = ({ courseData }: iAppProps) => {
     const pathname = usePathname();
@@ -56,20 +56,21 @@ const CourseSideBar = ({ courseData }: iAppProps) => {
                                         <p className='text-[10px] text-muted-foreground font-medium truncate'>{chapter.lessons.length} lessons</p>
                                     </div>
                                 </Button>
-                                <CollapsibleContent className='mt-3 pl-6 border-l-2 space-y-3'>
-                                    {
-                                        chapter.lessons.map((lesson) => (
-                                            <LessonItem
-                                                key={lesson.id}
-                                                lesson={lesson}
-                                                slug={courseData.slug}
-                                                isActive={currentLesonId === lesson.id}
-                                                completed={lesson.lessonProgrss.find((progrss) => progrss.lessonId === lesson.id)?.completed || false}
-                                            />
-                                        ))
-                                    }
-                                </CollapsibleContent>
                             </CollapsibleTrigger>
+                            <CollapsibleContent className='mt-3 pl-6 border-l-2 space-y-3'>
+                                {
+                                    chapter.lessons.map((lesson) => (
+                                        <LessonItem
+                                            key={lesson.id}
+                                            lesson={lesson}
+                                            slug={courseData.slug}
+                                            isActive={currentLesonId === lesson.id}
+                                            completed={lesson.lessonProgrss.find((progrss) => progrss.lessonId === lesson.id)?.completed || false}
+                                        />
+                                    ))
+                                }
+                            </CollapsibleContent>
+
                         </Collapsible>
                     ))
                 }

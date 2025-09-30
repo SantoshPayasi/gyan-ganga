@@ -26,7 +26,7 @@ const NavigationDesktopItems: NavigationDesktopItemsProps[] = [
     },
     {
         name: "Dashboard",
-        href: "/admin"
+        href: "/dashboard"
     }
 ]
 const Navbar = () => {

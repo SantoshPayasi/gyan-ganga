@@ -2,8 +2,6 @@ import { EmptyState } from "@/components/general/EmptyState"
 import { getAllCourses } from "../data/course/get-all-courses"
 import { getEnrolledCourses } from "../data/user/get-enrolled-courses"
 import { AdminCourseCard } from "../admin/courses/_components/admin-course-card"
-import { PublicCourseCard } from "../(public)/courses/_components/public-course-card"
-import Link from "next/link"
 import { EnrolledCourseCard } from "./_components/course-progress-card"
 
 export default async function DashboardPage() {
@@ -13,7 +11,7 @@ export default async function DashboardPage() {
   ])
   return (
     <>
-      <div className="flex flex:col gap-2">
+      <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold">Enrolled Courses</h1>
         <p className="text-muted-foreground">Here you can see all courses you have access to</p>
       </div>
@@ -32,7 +30,7 @@ export default async function DashboardPage() {
       }
 
       <section className="mt-10 mb-5">
-        <div className="flex flex:col gap-2">
+        <div className="flex flex-col gap-2">
           <h1 className="text-3xl font-bold">Available Courses</h1>
           <p className="text-muted-foreground">Here you can see all courses you can purchase</p>
         </div>

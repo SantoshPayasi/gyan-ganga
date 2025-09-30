@@ -77,7 +77,6 @@ export function Uploader({ value, onChange, fileTypeAccepted }: iAppProps) {
             await new Promise<void>((resolve, reject) => {
                 const xhr = new XMLHttpRequest();
                 xhr.upload.onprogress = (event) => {
-                    console.log(event.loaded, event.total)
                     if (event.lengthComputable) {
                         const percentage = Math.round((event.loaded / event.total) * 100);
                         setFileState((prev) => ({
@@ -98,7 +97,7 @@ export function Uploader({ value, onChange, fileTypeAccepted }: iAppProps) {
                             key: key
                         }))
                         if (onChange) {
-                            onChange("");
+                            onChange(key);
                         }
                         toast.success("File uploaded successfully")
                         resolve();
